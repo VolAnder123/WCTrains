@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>c312753d-c134-4013-9e64-874fb84888ca</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>WCTrains.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,25 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="WCTrains.py" />
+    <Compile Include="botHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="main.py" />
+    <Compile Include="train.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="trainFinder.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="trainType.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="html\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="html\trainTickets.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

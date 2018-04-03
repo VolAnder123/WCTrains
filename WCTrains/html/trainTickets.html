@@ -1,0 +1,173 @@
+﻿<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script type="text/javascript">
+        function changeLoaderVisibility(isLoaderVisible) {
+            var loader = document.getElementById('loader');
+            var trainsContainer = document.getElementById('trainsContainer');
+            if (isLoaderVisible === true) {
+                loader.style.display = "block";
+                trainsContainer.style.display = "none";
+            }
+            else {
+                loader.style.display = "none";
+                trainsContainer.style.display = "block";
+            }
+        }
+
+        function requestTickets() {
+            changeLoaderVisibility(true);
+
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = processTicketsInfo;
+            httpRequest.open('GET', 'https://tickets.transport2018.com/free-train/results?event_id=9');
+            httpRequest.send();
+        }
+
+        function processTicketsInfo() {
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                var jsonObject = JSON.parse(this.responseText);
+
+                var minDepartureDate = new Date(document.getElementById("minDepartureDate").value);
+                var trainsTo = jsonObject[0].variants.filter(el => filterTrainsTo(el,minDepartureDate));
+                document.getElementById("trainsTo").innerHTML = getHtmlStringFromTrains(trainsTo);
+
+                var maxArrivalDate = new Date(document.getElementById("maxArrivalDate").value);
+                var trainsFrom = jsonObject[1].variants.filter(el => filterTrainsFrom(el, maxArrivalDate));
+                document.getElementById("trainsFrom").innerHTML = getHtmlStringFromTrains(trainsFrom);
+
+                changeLoaderVisibility(false);
+            }
+        }
+
+        function filterTrainsTo(train, minDepartureDate) {
+            var departureDate = getDate(train.departure.date, train.departure.time);
+            return departureDate >= minDepartureDate
+        }
+
+        function filterTrainsFrom(train, maxArrivalDate) {
+            var arrivalDate = getDate(train.arrival.date, train.arrival.time);
+            return arrivalDate <= maxArrivalDate
+        }
+
+        function getDate(dateString, timeString) {
+            var splittedDate = dateString.split(' ');
+            var monthNumber;
+            switch (splittedDate[1]) {
+                case "июня":
+                    monthNumber = 6;
+                    break;
+            }
+
+            var splittedTime = timeString.split(':');
+
+            return new Date(2018, monthNumber - 1, splittedDate[0], splittedTime[0], splittedTime[1]);
+        }
+
+		function getHtmlStringFromTrains(trains) {
+            var html = "";
+            for (var i = 0; i < trains.length; i++) {
+                html += "<tr>";
+                html += "<td class=\"free-tickets\">" + trains[i].seats + "</td>";
+                html += "<td class=\"departure-column\">" + trains[i].departure.date + ", " + trains[i].departure.time + ", " + trains[i].departure.day + ", " + trains[i].departure.station + "</td>";
+                html += "<td class=\"arrival-column\">" + trains[i].arrival.date + ", " + trains[i].arrival.time + ", " + trains[i].arrival.day + ", " + trains[i].arrival.station + "</td>";
+                html += "</tr>";
+			}
+			return html;
+        }
+    </script>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table caption {
+            text-align: left;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        #trainsContainer, #loader, .filters {
+            margin: 10px 0 0 0;
+        }
+
+        .filters label {
+            display: block;
+            float: left;
+            width: 300px;
+        }
+
+        .filters div {
+            margin: 5px 0 0 0;
+        }
+
+        .departure-column, .arrival-column {
+            width: 435px;
+        }
+
+        .free-tickets {
+            width: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div>Билеты на Франция - Австралия</div>
+        <div>Ссылка на сайт: <a href="https://tickets.transport2018.com/free-train/schedule" target="_blank">tickets.transport2018.com</a></div>
+        <div class="filters">
+            <div>
+                <label for="minDepartureDate">Минимальная дата отправления на матч:</label>
+                <input id="minDepartureDate" type="datetime-local" value="2018-06-15T00:00" onchange="requestTickets()" />
+            </div>
+            <div>
+                <label for="maxArrivalDate">Максимальная дата прибытия с матча:</label>
+                <input id="maxArrivalDate" type="datetime-local"  value="2018-06-17T22:00" onchange="requestTickets()"  />
+            </div>
+        </div>
+        <div id="loader">Жди...</div>
+        <div id="trainsContainer">
+            <div>
+                <a href="#" onclick="requestTickets()">Обновить</a>
+            </div>
+            <div>
+                <table>
+                    <caption>Поезда на матч</caption>
+                    <thead>
+                        <tr>
+                            <td class="free-tickets">Свободно</td>
+                            <td class="departure-column">Отправление</td>
+                            <td class="arrival-column">Прибытие</td>
+                        </tr>
+                    </thead>
+                    <tbody id="trainsTo"></tbody>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <caption>Поезда с матча</caption>
+                    <thead>
+                        <tr>
+                            <td class="free-tickets">Свободно</td>
+                            <td class="departure-column">Отправление</td>
+                            <td class="arrival-column">Прибытие</td>
+                        </tr>
+                    </thead>
+                    <tbody id="trainsFrom"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+                requestTickets();
+            })();
+    </script>
+</body>
+</html>
