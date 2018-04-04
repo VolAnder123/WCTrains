@@ -25,10 +25,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
-    <Compile Include="train.py">
+    <Compile Include="trainFinder.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="trainFinder.py">
+    <Compile Include="train.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="trainType.py">

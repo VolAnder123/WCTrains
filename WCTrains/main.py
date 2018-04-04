@@ -1,5 +1,6 @@
 import datetime
 from botHandler import BotHandler
+from train import Train
 from trainFinder import TrainFinder
 
 bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE') 
