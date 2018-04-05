@@ -4,6 +4,7 @@ from datetime import datetime
 from trainType import TrainType
 from train import Train
 
+
 class TrainFinder:
     def __init__(self, gameUrl, minDepartureDateToTheGame, maxArrivalDateFromTheGame, lock):
         self.gameUrl = gameUrl

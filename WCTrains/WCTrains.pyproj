@@ -24,14 +24,17 @@
     <Compile Include="botHandler.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="main.py" />
     <Compile Include="trainFinder.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="main.py" />
     <Compile Include="train.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="trainType.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
