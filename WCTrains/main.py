@@ -1,5 +1,7 @@
 import datetime
 import threading
+import requests
+import logging
 from botHandler import BotHandler
 from train import Train
 from trainFinder import TrainFinder
@@ -23,10 +25,13 @@ def messageHandler():
 
             if lowerMessage == "чпч":
                 bot.send_message(last_chat_id, 'Сча узнаю. Пару сек')
-                if(trainFinder.isFoundNewFreeTrains()):
-                    responseText = 'Есть места!\nhttps://tickets.transport2018.com/free-train/schedule'
-                else:
-                    responseText = 'Да нету ничего. Работай давай'
+                try:
+                    if(trainFinder.isFoundNewFreeTrains()):
+                        responseText = 'Есть места!\nhttps://tickets.transport2018.com/free-train/schedule'
+                    else:
+                        responseText = 'Да нету ничего. Работай давай'
+                except requests.exceptions.ConnectionError:
+                    responseText = 'Не могу достучаться до сервака с билетами. Попробуй еще раз чуть позже'
             elif lowerMessage == "пинг" or lowerMessage == "ping":
                 responseText = "живой я"
             elif lowerMessage == "ты спортсмен?":
@@ -40,12 +45,15 @@ def messageHandler():
 
 
 def CheckTrains():
-    while True:
-        if(trainFinder.isFoundNewFreeTrains()):
-            chatIds = bot.getAllChatIds()
-            SendMessage(chatIds, 'Э, ебанько, там свободные места есть!\nhttps://tickets.transport2018.com/free-train/schedule')
+    try:
+        while True:
+            if(trainFinder.isFoundNewFreeTrains()):
+                chatIds = bot.getAllChatIds()
+                SendMessage(chatIds, 'Э, ебанько, там свободные места есть!\nhttps://tickets.transport2018.com/free-train/schedule')
 
-        sleep(60)
+            sleep(90)
+    except requests.exceptions.ConnectionError:
+        logging.warning('Connection refused')
 
 def SendMessage(chatIds, message):
     for chatId in chatIds:
