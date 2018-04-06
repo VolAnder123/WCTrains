@@ -16,7 +16,7 @@ class BotHandler:
         if (response.status_code == 200):
             json = response.json()['result']
         else:
-            logging.warning('Not successs request in botHandler.get_updates(), Reason: {0}, Code: {1}'.format(response.reason, response.status_code))
+            logging.warning('Not success request in botHandler.get_updates(), Reason: {0}, Code: {1}'.format(response.reason, response.status_code))
         return json
 
     def sendMessage(self, chat_id, text):
