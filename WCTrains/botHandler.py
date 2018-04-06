@@ -36,5 +36,5 @@ class BotHandler:
         return last_update
 
     def getAllChatIds(self):	
-        return [defaultChatId]
+        return [self.defaultChatId]
 
