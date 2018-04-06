@@ -11,6 +11,19 @@ trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 17, 17), threading.Lock())
 
+def DisplayFreeTrains():
+    freeTrains = trainFinder.getNewFreeTrains()
+    if(len(freeTrains) > 0):
+        responseText = ""
+        for train in freeTrains:
+            responseText += "Свободно: {0}\n".format(train.freeSeats)
+        responseText += "https://tickets.transport2018.com/free-train/schedule"
+        SendMessage(bot.getAllChatIds(), responseText)
+        return True
+    else:
+        return False
+    return 
+
 def messageHandler():
     new_offset = None
 
@@ -24,12 +37,11 @@ def messageHandler():
 
             lowerMessage = last_chat_text.lower()
 
+            responseText = None
             if lowerMessage == "чпч":
                 bot.sendMessage(last_chat_id, 'Сча узнаю. Пару сек')
                 try:
-                    if(trainFinder.isFoundNewFreeTrains()):
-                        responseText = 'Есть места!\nhttps://tickets.transport2018.com/free-train/schedule'
-                    else:
+                    if(DisplayFreeTrains() == False):
                         responseText = 'Да нету ничего. Работай давай'
                 except requests.exceptions.ConnectionError:
                     responseText = 'Не могу достучаться до сервака с билетами. Попробуй еще раз чуть позже'
@@ -40,7 +52,8 @@ def messageHandler():
             else:
                 responseText = 'Я хз о чем ты'
 
-            bot.sendMessage(last_chat_id, responseText)
+            if responseText is not None:
+                bot.sendMessage(last_chat_id, responseText)
 
             new_offset = last_update_id + 1
 
@@ -48,10 +61,7 @@ def messageHandler():
 def CheckTrains():
     try:
         while True:
-            if(trainFinder.isFoundNewFreeTrains()):
-                chatIds = bot.getAllChatIds()
-                SendMessage(chatIds, 'Э, ебанько, там свободные места есть!\nhttps://tickets.transport2018.com/free-train/schedule')
-
+            DisplayFreeTrains()
             sleep(90)
     except requests.exceptions.ConnectionError:
         logging.warning('Connection refused')

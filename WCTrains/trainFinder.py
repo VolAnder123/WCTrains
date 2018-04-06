@@ -45,17 +45,17 @@ class TrainFinder:
                 freeTrains.append(train)
         return freeTrains
 
-    def isFoundNewFreeTrains(self):
+    def getNewFreeTrains(self):
         self.lock.acquire()
 
-        freeTrains = self.findFreeTrains()
-        isFoundNewFreeTrains = (len(freeTrains) > len(self.alreadyFoundFreeTrains))
-        if isFoundNewFreeTrains == False:
-            for freeTrain in freeTrains:
-                isFoundNewFreeTrains = all(freeTrain.id != train.id or freeTrain.freeSeats > train.freeSeats for train in self.alreadyFoundFreeTrains)
-        self.alreadyFoundFreeTrains = freeTrains;
+        currentFreeTrains = self.findFreeTrains()
+        newFreeTrains = []
+        for freeTrain in currentFreeTrains:
+            if(all(freeTrain.id != train.id or freeTrain.freeSeats > train.freeSeats for train in self.alreadyFoundFreeTrains)):
+                newFreeTrains.append(freeTrain)
+        self.alreadyFoundFreeTrains = currentFreeTrains;
 
         self.lock.release()
 
-        return isFoundNewFreeTrains
+        return newFreeTrains
 
