@@ -6,7 +6,7 @@ from time import sleep
 from botHandler import BotHandler
 from trainFinder import TrainFinder
 
-bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE') 
+bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', '403996075') 
 trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9", datetime.datetime(2018, 6, 15), datetime.datetime(2018, 6, 17, 22), threading.Lock())
 
 def messageHandler():
