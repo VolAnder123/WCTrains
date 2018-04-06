@@ -6,9 +6,11 @@ from train import Train
 
 
 class TrainFinder:
-    def __init__(self, gameUrl, minDepartureDateToTheGame, maxArrivalDateFromTheGame, lock):
+    def __init__(self, gameUrl, minDepartureDateToTheGame, maxDepartureDateToTheGame, minArrivalDateFromTheGame, maxArrivalDateFromTheGame, lock):
         self.gameUrl = gameUrl
         self.minDepartureDateToTheGame = minDepartureDateToTheGame
+        self.maxDepartureDateToTheGame = maxDepartureDateToTheGame
+        self.minArrivalDateFromTheGame = minArrivalDateFromTheGame
         self.maxArrivalDateFromTheGame = maxArrivalDateFromTheGame
         self.lock = lock
         self.alreadyFoundFreeTrains = []
@@ -37,7 +39,9 @@ class TrainFinder:
         trains = self.findTrains()
         freeTrains = []
         for train in trains:
-            if (train.freeSeats > 0) and ((train.trainType == TrainType.TO and train.departureDate >= self.minDepartureDateToTheGame) or (train.trainType == TrainType.FROM and train.arrivalDate <= self.maxArrivalDateFromTheGame)):
+            if (train.freeSeats > 0) and (
+                (train.trainType == TrainType.TO and train.departureDate >= self.minDepartureDateToTheGame and train.departureDate <= self.maxDepartureDateToTheGame) 
+                or (train.trainType == TrainType.FROM and train.arrivalDate >= self.minArrivalDateFromTheGame and train.arrivalDate <= self.maxArrivalDateFromTheGame)):
                 freeTrains.append(train)
         return freeTrains
 
