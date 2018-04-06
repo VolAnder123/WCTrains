@@ -1,28 +1,33 @@
 import requests  
 import datetime
+import logging
 
 class BotHandler:
     def __init__(self, token):
         self.token = token
         self.api_url = "https://api.telegram.org/bot{}/".format(token)
 
-    def get_updates(self, offset=None, timeout=30):
+    def getUpdates(self, offset=None, timeout=30):
         method = 'getUpdates'
         params = {'timeout': timeout, 'offset': offset}
-        resp = requests.get(self.api_url + method, params)
-        result_json = resp.json()['result']
-        return result_json
+        response = requests.get(self.api_url + method, params)
+        json = None
+        if (response.status_code == 200):
+            json = response.json()['result']
+        else:
+            logging.warning('Not successs request in botHandler.get_updates(), Reason: {0}, Code: {1}'.format(response.reason, response.status_code))
+        return json
 
-    def send_message(self, chat_id, text):
+    def sendMessage(self, chat_id, text):
         params = {'chat_id': chat_id, 'text': text}
         method = 'sendMessage'
         resp = requests.post(self.api_url + method, params)
         return resp
 
-    def get_last_update(self, offset=None):
-        get_result = self.get_updates(offset)
+    def getLastUpdate(self, offset=None):
+        get_result = self.getUpdates(offset)
 
-        if len(get_result) > 0:
+        if get_result is not None and len(get_result) > 0:
             last_update = get_result[-1]
         else:
             last_update = None

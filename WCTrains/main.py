@@ -13,7 +13,7 @@ def messageHandler():
     new_offset = None
 
     while True:
-        last_update = bot.get_last_update(new_offset)
+        last_update = bot.getLastUpdate(new_offset)
 
         if(last_update is not None):
             last_update_id = last_update['update_id']
@@ -23,7 +23,7 @@ def messageHandler():
             lowerMessage = last_chat_text.lower()
 
             if lowerMessage == "чпч":
-                bot.send_message(last_chat_id, 'Сча узнаю. Пару сек')
+                bot.sendMessage(last_chat_id, 'Сча узнаю. Пару сек')
                 try:
                     if(trainFinder.isFoundNewFreeTrains()):
                         responseText = 'Есть места!\nhttps://tickets.transport2018.com/free-train/schedule'
@@ -38,7 +38,7 @@ def messageHandler():
             else:
                 responseText = 'Я хз о чем ты'
 
-            bot.send_message(last_chat_id, responseText)
+            bot.sendMessage(last_chat_id, responseText)
 
             new_offset = last_update_id + 1
 
@@ -56,7 +56,7 @@ def CheckTrains():
 
 def SendMessage(chatIds, message):
     for chatId in chatIds:
-        bot.send_message(chatId, message)
+        bot.sendMessage(chatId, message)
 
 
 def main(): 
