@@ -4,7 +4,7 @@ import requests
 import logging
 from time import sleep
 from botHandler import BotHandler
-from trains.trainFinder import TrainFinder
+from tickets.trains.trainFinder import TrainFinder
 from searchType import SearchType
 
 bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', '403996075') 
@@ -12,7 +12,7 @@ trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17), threading.Lock())
 
-def messageHandler():
+def messageHandler(searchType: SearchType):
     new_offset = None
 
     while True:
@@ -27,14 +27,26 @@ def messageHandler():
 
             responseText = None
             if lowerMessage == "чпч":
-                bot.sendMessage(last_chat_id, 'Сча узнаю. Пару сек')
-                try:
-                    responseText = GetFreeTrainsString()
-                    if(responseText is None):
-                        responseText = 'Да нету ничего. Работай давай'
-                except requests.exceptions.ConnectionError:
-                    responseText = 'Не могу достучаться до сервака с билетами. Попробуй еще раз чуть позже'
-            elif lowerMessage == "пинг" or lowerMessage == "ping":
+                if searchType != SearchType.NOTHING:
+                    bot.sendMessage(last_chat_id, 'Сча все узнаю. Пару сек')
+                    if searchType == SearchType.EVERYTHING or searchType == SearchType.ONLY_TRAIN_TICKETS:
+                        try:
+                            trainsResponseText = GetFreeTrainsString()
+                        except requests.exceptions.ConnectionError:
+                            trainsResponseText = 'Не могу достучаться до сервака с билетами на поезда. Попробуй еще раз чуть позже'
+
+                    if searchType == SearchType.EVERYTHING or searchType == SearchType.ONLY_GAME_TICKETS:
+                        try:
+                            gamesResponseText = GetFreeGamesString()
+                        except requests.exceptions.ConnectionError:
+                            gamesResponseText = 'Не могу достучаться до сервака с билетами на поезда. Попробуй еще раз чуть позже'
+                    
+                    responseText = joinStrings([trainsResponseText, gamesResponseText], "\n")
+                    if responseText is None:
+                        responseText = "Нету ничего"
+                else:
+                    responseText = "А как я пойму чего ты хочешь? Ты настроил так, чтобы я ничего не искал сам. Попробуй спросить подругому"
+            elif lowerMessage in ["пинг", "ping", "/ping"]:
                 responseText = "живой я"
             elif lowerMessage == "ты спортсмен?":
                 responseText = 'иди нахуй'
@@ -46,6 +58,15 @@ def messageHandler():
 
             new_offset = last_update_id + 1
 
+def joinStrings(stringArray, separator: str):
+    response = None
+    for string in stringArray:
+        if(string is not None):
+            if(response is not None):
+                response += separator + string
+            else:
+                response = string
+    return response
 
 def CheckTrains():
     try:
@@ -70,23 +91,43 @@ def GetFreeTrainsString():
 
 
 def CheckGames():
-    return 1
+    try:
+        while True:
+            freeGamesString = GetFreeGamesString()
+            if freeGamesString is not None:
+                bot.sendMessageToAll(freeGamesString)
+            sleep(90)
+    except requests.exceptions.ConnectionError:
+        logging.warning('Connection refused')
+
+def GetFreeGamesString():
+    responseText = None
+    return responseText
+    freeTrains = gameFinder.getNewFreeTrains()
+    if(len(freeTrains) > 0):
+        responseText = ""
+        for train in freeTrains:
+            responseText += "Свободно: {0}\n".format(train.freeSeats)
+        responseText += "https://tickets.transport2018.com/free-train/schedule"
+    return responseText
 
 
-def main(searchType: SearchType): 
+def main(): 
+    searchType = SearchType.EVERYTHING
+
     if searchType == SearchType.EVERYTHING or searchType == SearchType.ONLY_TRAIN_TICKETS:
         trainsThread = threading.Thread(target = CheckTrains)
-        trainsThread.start()
+        #trainsThread.start()
 
     if searchType == SearchType.EVERYTHING or searchType == SearchType.ONLY_GAME_TICKETS:
         gamesThread = threading.Thread(target = CheckGames)
-        gamesThread.start()
+        #gamesThread.start()
 
-    messageHandler()
+    messageHandler(searchType)
 
 
 if __name__ == '__main__':  
     try:
-        main(SearchType.ONLY_TRAIN_TICKETS)
+        main()
     except KeyboardInterrupt:
         exit()

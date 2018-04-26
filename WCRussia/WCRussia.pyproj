@@ -28,26 +28,25 @@
     <Compile Include="searchType.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="trains\trainFinder.py">
+    <Compile Include="tickets\trains\train.py" />
+    <Compile Include="tickets\trains\trainType.py" />
+    <Compile Include="tickets\trains\__init__.py" />
+    <Compile Include="tickets\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tickets\trains\trainFinder.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
-    <Compile Include="trains\train.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="trains\trainType.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="trains\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="html\" />
-    <Folder Include="trains\" />
+    <Folder Include="tickets\" />
+    <Folder Include="C:\Users\avolchetsky\Desktop\ToRemove\WCRussia\WCRussia\tickets\trains\" />
+    <Folder Include="tickets\trains\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="html\trainTickets.html" />
