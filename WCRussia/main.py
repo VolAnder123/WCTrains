@@ -8,9 +8,9 @@ from tickets.trains.trainFinder import TrainFinder
 from searchType import SearchType
 
 bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', '403996075') 
-trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9"
+trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9", threading.Lock()
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
-                          , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17), threading.Lock())
+                          , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
 
 def messageHandler(searchType: SearchType):
     new_offset = None

@@ -28,6 +28,12 @@
     <Compile Include="searchType.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tickets\entity.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tickets\ticketsFinder.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tickets\trains\train.py" />
     <Compile Include="tickets\trains\trainType.py" />
     <Compile Include="tickets\trains\__init__.py" />

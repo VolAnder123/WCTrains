@@ -1,6 +1,8 @@
-class Train:
+from tickets.entity import Entity
+
+class Train(Entity):
     def __init__(self, id, freeSeats, trainType, departureDate, arrivalDate):
-        self.id = id
+        Entity.__init__(self, id)
         self.freeSeats = freeSeats
         self.trainType = trainType
         self.departureDate = departureDate
