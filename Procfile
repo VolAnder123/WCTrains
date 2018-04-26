@@ -1,1 +1,1 @@
-worker: python WCTrains/main.py
+worker: python WCRussia/main.py
