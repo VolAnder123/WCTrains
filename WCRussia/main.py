@@ -4,7 +4,7 @@ import requests
 import logging
 from time import sleep
 from botHandler import BotHandler
-from trainFinder import TrainFinder
+from trains.trainFinder import TrainFinder
 
 bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', '403996075') 
 trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9"

@@ -25,14 +25,20 @@
     <Compile Include="botHandler.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="trainFinder.py">
+    <Compile Include="searchType.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="trains\trainFinder.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
-    <Compile Include="train.py">
+    <Compile Include="trains\train.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="trainType.py">
+    <Compile Include="trains\trainType.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="trains\__init__.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__init__.py">
@@ -41,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="html\" />
+    <Folder Include="trains\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="html\trainTickets.html" />
