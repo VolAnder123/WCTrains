@@ -19,11 +19,15 @@ class BotHandler:
             logging.warning('Not success request in botHandler.get_updates(), Reason: {0}, Code: {1}'.format(response.reason, response.status_code))
         return json
 
-    def sendMessage(self, chat_id, text):
-        params = {'chat_id': chat_id, 'text': text}
+    def sendMessage(self, chatId, message):
         method = 'sendMessage'
-        resp = requests.post(self.api_url + method, params)
-        return resp
+        params = {'chat_id': chatId, 'text': message}
+        requests.post(self.api_url + method, params)
+
+    def sendMessageToAll(self, message):
+        chatIds = self.getAllChatIds()
+        for chatId in chatIds:
+            self.sendMessage(chatId, message)
 
     def getLastUpdate(self, offset=None):
         get_result = self.getUpdates(offset)
