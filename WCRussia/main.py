@@ -5,12 +5,14 @@ import logging
 from time import sleep
 from botHandler import BotHandler
 from tickets.trains.trainFinder import TrainFinder
+from tickets.games.gameFinder import GameFinder
 from searchType import SearchType
 
 bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', '403996075') 
 trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9", threading.Lock()
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
+gameFinder = GameFinder("https://tickets.fifa.com/API/WCachedL1/ru/BasicCodes/GetBasicCodesAvailavilityDemmand?currencyId=USD", threading.Lock())
 
 def messageHandler(searchType: SearchType):
     new_offset = None
@@ -81,7 +83,7 @@ def CheckTrains():
 
 def GetFreeTrainsString():
     responseText = None
-    freeTrains = trainFinder.getNewFreeTrains()
+    freeTrains = trainFinder.getNewAvailableTickets()
     if(len(freeTrains) > 0):
         responseText = ""
         for train in freeTrains:
@@ -102,8 +104,7 @@ def CheckGames():
 
 def GetFreeGamesString():
     responseText = None
-    return responseText
-    freeTrains = gameFinder.getNewFreeTrains()
+    freeTrains = gameFinder.getNewAvailableTickets()
     if(len(freeTrains) > 0):
         responseText = ""
         for train in freeTrains:
@@ -121,7 +122,7 @@ def main():
 
     if searchType == SearchType.EVERYTHING or searchType == SearchType.ONLY_GAME_TICKETS:
         gamesThread = threading.Thread(target = CheckGames)
-        #gamesThread.start()
+        gamesThread.start()
 
     messageHandler(searchType)
 

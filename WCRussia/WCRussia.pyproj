@@ -31,6 +31,16 @@
     <Compile Include="tickets\entity.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tickets\games\game.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tickets\games\gameFinder.py" />
+    <Compile Include="tickets\games\gameTicket.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tickets\games\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tickets\ticketsFinder.py">
       <SubType>Code</SubType>
     </Compile>
@@ -52,6 +62,7 @@
     <Folder Include="html\" />
     <Folder Include="tickets\" />
     <Folder Include="C:\Users\avolchetsky\Desktop\ToRemove\WCRussia\WCRussia\tickets\trains\" />
+    <Folder Include="tickets\games\" />
     <Folder Include="tickets\trains\" />
   </ItemGroup>
   <ItemGroup>

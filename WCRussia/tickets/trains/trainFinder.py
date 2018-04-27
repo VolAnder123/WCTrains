@@ -13,8 +13,8 @@ class TrainFinder(TicketsFinder):
         self.minArrivalDateFromTheGame = minArrivalDateFromTheGame
         self.maxArrivalDateFromTheGame = maxArrivalDateFromTheGame
 
-    def jsonToTrain(self, trainsJson, trainType):
-        variants = trainsJson['variants']
+    def jsonToTickets(self, ticketsJson, trainType):
+        variants = entitiesJson['variants']
         trains = []
         for variant in variants:
             departureDate = self.getDate(variant['departure'])
@@ -28,11 +28,11 @@ class TrainFinder(TicketsFinder):
 
     def findTickets(self):
         trainsJson = TicketsFinder.findTickets(self)
-        trains = self.jsonToTrain(trainsJson[0], TrainType.TO)
-        trains.extend(self.jsonToTrain(trainsJson[1], TrainType.FROM))
+        trains = self.jsonToEntity(trainsJson[0], TrainType.TO)
+        trains.extend(self.jsonToEntity(trainsJson[1], TrainType.FROM))
         return trains
 
-    def findFreeTrains(self):
+    def findAvailableTickets(self):
         trains = self.findTickets()
         freeTrains = []
         for train in trains:
@@ -42,10 +42,10 @@ class TrainFinder(TicketsFinder):
                 freeTrains.append(train)
         return freeTrains
 
-    def getNewFreeTrains(self):
+    def getNewAvailableTickets(self):
         self.lock.acquire()
 
-        currentFreeTrains = self.findFreeTrains()
+        currentFreeTrains = self.findAvailableTickets()
         newFreeTrains = []
         for freeTrain in currentFreeTrains:
             if(all(freeTrain.id != train.id or freeTrain.freeSeats > train.freeSeats for train in self.alreadyFoundAvailableTickets)):
