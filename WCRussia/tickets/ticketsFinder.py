@@ -7,18 +7,6 @@ class TicketsFinder(ABC):
         self.lock = lock
         self.alreadyFoundAvailableTickets = []
 
-    @abstractmethod
-    def jsonToTickets(self, ticketsJson):
-        pass
-
     def findTickets(self):
         response = requests.get(self.infoUrl)
         return response.json()
-    
-    @abstractmethod
-    def findAvailableTickets(self):
-        pass
-
-    @abstractmethod
-    def getNewAvailableTickets(self):
-        pass

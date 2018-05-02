@@ -98,18 +98,21 @@ def CheckGames():
             freeGamesString = GetFreeGamesString()
             if freeGamesString is not None:
                 bot.sendMessageToAll(freeGamesString)
-            sleep(90)
+            sleep(1)
     except requests.exceptions.ConnectionError:
         logging.warning('Connection refused')
 
 def GetFreeGamesString():
     responseText = None
-    freeTrains = gameFinder.getNewAvailableTickets()
-    if(len(freeTrains) > 0):
-        responseText = ""
-        for train in freeTrains:
-            responseText += "Свободно: {0}\n".format(train.freeSeats)
-        responseText += "https://tickets.transport2018.com/free-train/schedule"
+    freeGames = gameFinder.getNewAvailableGames()
+    if(len(freeGames) > 0):
+        responseText = "Появились новые билеты на игры"
+        for game in freeGames:
+            responseText += "\n{0}: ".format(game.name)
+            for ticket in game.tickets:
+                responseText += "{0}, ".format(ticket.gameTicketCategory.categoryName)
+            responseText = responseText[:-2]
+        responseText += "\nhttps://queue.tickets.fifa.com/?c=fifa&e=fwc2018&cid=ru-RU&t_lang=ru"
     return responseText
 
 

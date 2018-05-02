@@ -38,6 +38,10 @@
     <Compile Include="tickets\games\gameTicket.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tickets\games\gameTicketCategory.py" />
+    <Compile Include="tickets\games\gameTicketCategoryType.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tickets\games\__init__.py">
       <SubType>Code</SubType>
     </Compile>
