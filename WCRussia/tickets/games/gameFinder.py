@@ -24,8 +24,7 @@ class GameFinder(TicketsFinder):
             tickets = []
             for availability in availabilitiesJson:
                 if game['ProductId'] == availability['p']:
-                    #tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), availability['a'] > 0))
-                    tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), True))
+                    tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), availability['a'] > 0))
             date = datetime.strptime(game['MatchDate'] , '%Y-%m-%dT%H:%M:%S')
             games.append(Game(game['ProductId'], game['ProductPublicName'], self.getStadium(stadiumsJson, game['MatchStadium']), date, tickets))
         return games
@@ -61,12 +60,15 @@ class GameFinder(TicketsFinder):
                     availableGames.append(game)
         return availableGames
 
+    def getAvailableGames(self):
+        return self.findAvailableGames([GameTicketCategoryType.CAT3],
+                                                        [4,5,6,0],
+                                                        [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
+
     def getNewAvailableGames(self):
         self.lock.acquire()
 
-        currentAvailableGames = self.findAvailableGames([GameTicketCategoryType.CAT3],
-                                                        [4,5,6,0],
-                                                        [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
+        currentAvailableGames = self.getAvailableGames()
         newAvailableGames = []
         for currentAvailableGame in currentAvailableGames:
             alreadyFoundGame = next((ticket for ticket in self.alreadyFoundAvailableTickets if currentAvailableGame.id == ticket.id), None)

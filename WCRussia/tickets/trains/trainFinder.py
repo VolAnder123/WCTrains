@@ -14,7 +14,7 @@ class TrainFinder(TicketsFinder):
         self.maxArrivalDateFromTheGame = maxArrivalDateFromTheGame
 
     def jsonToTickets(self, ticketsJson, trainType):
-        variants = entitiesJson['variants']
+        variants = ticketsJson['variants']
         trains = []
         for variant in variants:
             departureDate = self.getDate(variant['departure'])
@@ -28,8 +28,8 @@ class TrainFinder(TicketsFinder):
 
     def findTickets(self):
         trainsJson = TicketsFinder.findTickets(self)
-        trains = self.jsonToEntity(trainsJson[0], TrainType.TO)
-        trains.extend(self.jsonToEntity(trainsJson[1], TrainType.FROM))
+        trains = self.jsonToTickets(trainsJson[0], TrainType.TO)
+        trains.extend(self.jsonToTickets(trainsJson[1], TrainType.FROM))
         return trains
 
     def findAvailableTickets(self):
