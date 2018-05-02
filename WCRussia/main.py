@@ -14,6 +14,8 @@ trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
 gameFinder = GameFinder("https://tickets.fifa.com/API/WCachedL1/ru/BasicCodes/GetBasicCodesAvailavilityDemmand?currencyId=USD", threading.Lock())
 
+weekDays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс" ]
+
 def messageHandler(searchType: SearchType):
     new_offset = None
 
@@ -98,7 +100,7 @@ def CheckGames():
             freeGamesString = GetFreeGamesString()
             if freeGamesString is not None:
                 bot.sendMessageToAll(freeGamesString)
-            sleep(1)
+            sleep(90)
     except requests.exceptions.ConnectionError:
         logging.warning('Connection refused')
 
@@ -108,7 +110,8 @@ def GetFreeGamesString():
     if(len(freeGames) > 0):
         responseText = "Появились новые билеты на игры"
         for game in freeGames:
-            responseText += "\n{0}: ".format(game.name)
+
+            responseText += "\n{0}, {1}: ".format(weekDays[game.date.weekday()], game.name)
             for ticket in game.tickets:
                 responseText += "{0}, ".format(ticket.gameTicketCategory.categoryName)
             responseText = responseText[:-2]
