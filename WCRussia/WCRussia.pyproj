@@ -38,7 +38,9 @@
     <Compile Include="tickets\games\gameTicket.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tickets\games\stadium.py" />
     <Compile Include="tickets\games\gameTicketCategory.py" />
+    <Compile Include="tickets\games\stadiumType.py" />
     <Compile Include="tickets\games\gameTicketCategoryType.py">
       <SubType>Code</SubType>
     </Compile>
