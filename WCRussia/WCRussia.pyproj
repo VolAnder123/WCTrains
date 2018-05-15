@@ -67,7 +67,6 @@
   <ItemGroup>
     <Folder Include="html\" />
     <Folder Include="tickets\" />
-    <Folder Include="C:\Users\avolchetsky\Desktop\ToRemove\WCRussia\WCRussia\tickets\trains\" />
     <Folder Include="tickets\games\" />
     <Folder Include="tickets\trains\" />
   </ItemGroup>
