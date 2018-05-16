@@ -27,7 +27,8 @@ class GameFinder(TicketsFinder):
                     isAvailable = availability['a'] > 0
                     tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), isAvailable))
             date = datetime.strptime(game['MatchDate'] , '%Y-%m-%dT%H:%M:%S')
-            games.append(Game(game['ProductId'], game['ProductPublicName'], self.getStadium(stadiumsJson, game['MatchStadium']), date, tickets))
+            games.append(Game(game['ProductId'], game['ProductPublicName']
+                              , self.getStadium(stadiumsJson, game['MatchStadium']), date, game['Rounds'], tickets))
         return games
 
     def getCategory(self, categoriesJson, categoryId):
@@ -47,11 +48,11 @@ class GameFinder(TicketsFinder):
         games = self.jsonToGames(ticketsJson)
         return games
 
-    def findAvailableGames(self, categoryType, weekdays, stadiumTypes):
+    def findAvailableGames(self, rounds, categoryType, weekdays, stadiumTypes):
         games = self.findTickets()
         availableGames = []
         for game in games:
-            if game.date.weekday() in weekdays and game.stadium.stadiumType in stadiumTypes:
+            if game.round in rounds and game.date.weekday() in weekdays and game.stadium.stadiumType in stadiumTypes:
                 availableTickets = []
                 for ticket in game.tickets:
                     if ticket.isAvailable and ticket.gameTicketCategory.gameTicketCategoryType in categoryType:
@@ -62,7 +63,7 @@ class GameFinder(TicketsFinder):
         return availableGames
 
     def getAvailableGames(self):
-        return self.findAvailableGames([GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4],
+        return self.findAvailableGames(['A'], [GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4],
                                                         [4,5,6,0],
                                                         [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
 
