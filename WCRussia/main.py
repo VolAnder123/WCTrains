@@ -105,7 +105,7 @@ def CheckGames():
             freeGamesString = GetFreeGamesString(gameFinder.getNewAvailableGames())
             if freeGamesString is not None:
                 bot.sendMessageToAll(freeGamesString)
-            sleep(90)
+            sleep(30)
     except requests.exceptions.ConnectionError:
         logging.warning('Connection refused')
 
