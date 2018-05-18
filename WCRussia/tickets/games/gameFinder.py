@@ -64,7 +64,7 @@ class GameFinder(TicketsFinder):
 
     def getAvailableGames(self):
         return self.findAvailableGames(['A'], [GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4],
-                                                        [4,5,6,0],
+                                                        [5,6],
                                                         [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
 
     def getNewAvailableGames(self):
