@@ -10,8 +10,12 @@ from .stadiumType import StadiumType
 
 
 class GameFinder(TicketsFinder):
-    def __init__(self, infoUrl, lock):
-        TicketsFinder.__init__(self, infoUrl, lock)        
+    def __init__(self, infoUrl, lock, rounds, categoryType, weekdays, stadiumTypes):
+        TicketsFinder.__init__(self, infoUrl, lock)    
+        self.rounds = rounds
+        self.categoryType = categoryType
+        self.weekdays = weekdays
+        self.stadiumTypes = stadiumTypes
 
     def jsonToGames(self, ticketsJson):
         gamesJson = ticketsJson['Data']['PRODUCTIMT']
@@ -24,7 +28,7 @@ class GameFinder(TicketsFinder):
             tickets = []
             for availability in availabilitiesJson:
                 if game['ProductId'] == availability['p']:
-                    isAvailable = availability['a'] > 0
+                    isAvailable = True #availability['a'] > 0
                     tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), isAvailable))
             date = datetime.strptime(game['MatchDate'] , '%Y-%m-%dT%H:%M:%S')
             games.append(Game(game['ProductId'], game['ProductPublicName']
@@ -48,29 +52,24 @@ class GameFinder(TicketsFinder):
         games = self.jsonToGames(ticketsJson)
         return games
 
-    def findAvailableGames(self, rounds, categoryType, weekdays, stadiumTypes):
+    def findAvailableGames(self):
         games = self.findTickets()
         availableGames = []
         for game in games:
-            if game.round in rounds and game.date.weekday() in weekdays and game.stadium.stadiumType in stadiumTypes:
+            if (not self.rounds or game.round in self.rounds) and (not self.weekdays or game.date.weekday() in self.weekdays) and game.stadium.stadiumType in self.stadiumTypes:
                 availableTickets = []
                 for ticket in game.tickets:
-                    if ticket.isAvailable and ticket.gameTicketCategory.gameTicketCategoryType in categoryType:
+                    if ticket.isAvailable and ticket.gameTicketCategory.gameTicketCategoryType in self.categoryType:
                         availableTickets.append(ticket)
                 if(len(availableTickets) > 0):
                     game.tickets = availableTickets
                     availableGames.append(game)
         return availableGames
 
-    def getAvailableGames(self):
-        return self.findAvailableGames(['A'], [GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4],
-                                                        [5,6],
-                                                        [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
-
     def getNewAvailableGames(self):
         self.lock.acquire()
 
-        currentAvailableGames = self.getAvailableGames()
+        currentAvailableGames = self.findAvailableGames()
         newAvailableGames = []
         for currentAvailableGame in currentAvailableGames:
             alreadyFoundGame = next((ticket for ticket in self.alreadyFoundAvailableTickets if currentAvailableGame.id == ticket.id), None)

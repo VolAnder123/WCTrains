@@ -7,12 +7,15 @@ from botHandler import BotHandler
 from tickets.trains.trainFinder import TrainFinder
 from tickets.games.gameFinder import GameFinder
 from searchType import SearchType
+from tickets.games.gameTicketCategoryType import GameTicketCategoryType
+from tickets.games.stadiumType import StadiumType
 
-bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', '403996075') 
+bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', ['403996075']) 
 trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9", threading.Lock()
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
-gameFinder = GameFinder("https://tickets.fifa.com/API/WCachedL1/ru/BasicCodes/GetBasicCodesAvailavilityDemmand?currencyId=USD", threading.Lock())
+gameFinder = GameFinder("https://tickets.fifa.com/API/WCachedL1/ru/BasicCodes/GetBasicCodesAvailavilityDemmand?currencyId=USD", threading.Lock()
+                        , [], [GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4], [], [StadiumType.SPB])
 
 weekDays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс" ]
 
@@ -71,7 +74,7 @@ def GetTicketsMessage(searchType: SearchType):
             trainsResponseText = 'Не могу достучаться до сервака с билетами на поезда. Попробуй еще раз чуть позже'
     if searchType == SearchType.EVERYTHING or searchType == SearchType.ONLY_GAME_TICKETS:
         try:
-            gamesResponseText = GetFreeGamesString(gameFinder.getAvailableGames())
+            gamesResponseText = GetFreeGamesString(gameFinder.findAvailableGames())
         except requests.exceptions.ConnectionError:
             gamesResponseText = 'Не могу достучаться до сервака с билетами на матчи. Попробуй еще раз чуть позже'
     responseText = joinStrings([trainsResponseText, gamesResponseText], "\n\n")

@@ -3,10 +3,10 @@ import datetime
 import logging
 
 class BotHandler:
-    def __init__(self, token, defaultChatId):
+    def __init__(self, token, defaultChatIds):
         self.token = token
         self.api_url = "https://api.telegram.org/bot{}/".format(token)
-        self.defaultChatId = defaultChatId
+        self.defaultChatIds = defaultChatIds
 
     def getUpdates(self, offset=None, timeout=30):
         method = 'getUpdates'
@@ -40,5 +40,5 @@ class BotHandler:
         return last_update
 
     def getAllChatIds(self):	
-        return [self.defaultChatId]
+        return self.defaultChatIds
 
