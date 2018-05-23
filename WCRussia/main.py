@@ -10,12 +10,12 @@ from searchType import SearchType
 from tickets.games.gameTicketCategoryType import GameTicketCategoryType
 from tickets.games.stadiumType import StadiumType
 
-bot = BotHandler('592870698:AAEu56VyOM8eAFthJSDFrQu-2wYOWb9AIHM', ['403996075']) 
+bot = BotHandler('592870698:AAEu56VyOM8eAFthJSDFrQu-2wYOWb9AIHM', ['403996075', '401655687']) 
 trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9", threading.Lock()
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
 gameFinder = GameFinder("https://tickets.fifa.com/API/WCachedL1/ru/BasicCodes/GetBasicCodesAvailavilityDemmand?currencyId=USD", threading.Lock()
-                        , [], [GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4], [], [StadiumType.SPB])
+                        , [], [GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4], [], [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
 
 weekDays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс" ]
 

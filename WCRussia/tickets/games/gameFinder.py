@@ -28,7 +28,7 @@ class GameFinder(TicketsFinder):
             tickets = []
             for availability in availabilitiesJson:
                 if game['ProductId'] == availability['p']:
-                    isAvailable = True #availability['a'] > 0
+                    isAvailable = availability['a'] > 0
                     tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), isAvailable))
             date = datetime.strptime(game['MatchDate'] , '%Y-%m-%dT%H:%M:%S')
             games.append(Game(game['ProductId'], game['ProductPublicName']
