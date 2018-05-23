@@ -10,7 +10,7 @@ from searchType import SearchType
 from tickets.games.gameTicketCategoryType import GameTicketCategoryType
 from tickets.games.stadiumType import StadiumType
 
-bot = BotHandler('588416451:AAHeNyVIy_ARN9kmPhM62ARjNE1cwFFf5JE', ['403996075']) 
+bot = BotHandler('592870698:AAEu56VyOM8eAFthJSDFrQu-2wYOWb9AIHM', ['403996075']) 
 trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?event_id=9", threading.Lock()
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
