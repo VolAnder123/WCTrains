@@ -15,7 +15,7 @@ trainFinder = TrainFinder("https://tickets.transport2018.com/free-train/results?
                           , datetime.datetime(2018, 6, 15, 10), datetime.datetime(2018, 6, 16)
                           , datetime.datetime(2018, 6, 17, 7), datetime.datetime(2018, 6, 19, 17))
 gameFinder = GameFinder("https://tickets.fifa.com/API/WCachedL1/ru/BasicCodes/GetBasicCodesAvailavilityDemmand?currencyId=USD", threading.Lock()
-                        , [], [GameTicketCategoryType.CAT1, GameTicketCategoryType.CAT2, GameTicketCategoryType.CAT3, GameTicketCategoryType.CAT4], [], [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
+                        , [], [GameTicketCategoryType.CAT3], [], [StadiumType.SPB, StadiumType.MLU, StadiumType.MSP])
 
 weekDays = ["пн", "вт", "ср", "чт", "пт", "сб", "вс" ]
 
