@@ -8,7 +8,8 @@ class GameTicketCategoryType(Enum):
     W = 18
     ES = 19
     AM = 20
-    OP = 37
     APW = 22
     APES = 23
     APAM = 24
+    OP = 37
+    OV = 56

@@ -25,14 +25,15 @@ class GameFinder(TicketsFinder):
         games = []
 
         for game in gamesJson:
-            tickets = []
-            for availability in availabilitiesJson:
-                if game['ProductId'] == availability['p']:
-                    isAvailable = availability['a'] > 0
-                    tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), isAvailable))
-            date = datetime.strptime(game['MatchDate'] , '%Y-%m-%dT%H:%M:%S')
-            games.append(Game(game['ProductId'], game['ProductPublicName']
-                              , self.getStadium(stadiumsJson, game['MatchStadium']), date, game['Rounds'], tickets))
+            if game['MatchIsClosed'] == False:
+                tickets = []
+                for availability in availabilitiesJson:
+                    if game['ProductId'] == availability['p']:
+                        isAvailable = availability['a'] > 0
+                        tickets.append(GameTicket(self.getCategory(categoriesJson, availability['c']), isAvailable))
+                date = datetime.strptime(game['MatchDate'] , '%Y-%m-%dT%H:%M:%S')
+                games.append(Game(game['ProductId'], game['ProductPublicName']
+                                  , self.getStadium(stadiumsJson, game['MatchStadium']), date, game['Rounds'], tickets))
         return games
 
     def getCategory(self, categoriesJson, categoryId):
