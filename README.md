@@ -1,1 +1,1 @@
-Telegram bot that search available tickets for games and free trains in WC 2018 in Russia
+Telegram bot that looking for available tickets to WC 2018 matches and free trains in Russia
